@@ -244,6 +244,14 @@ controller_templates:
     credentials:
       - "OpenShift Credential"
 
+  - name: OpenShift / Create Project
+    job_type: run
+    ask_inventory_on_launch: true
+    project: "Ansible Product Demos"
+    playbook: "openshift/project/create.yml"
+    credentials:
+      - "OpenShift Credential"
+
 controller_workflows:
   - name: OpenShift / CNV / Infra Stack
     description: A workflow to deploy Virtualized infra in OCP Virtalization
