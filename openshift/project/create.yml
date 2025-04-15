@@ -5,8 +5,8 @@
   tasks:
     - name: Create OpenShift project
       kubernetes.core.k8s:
-        api_version: project.openshift.io/v1
-        kind: ProjectRequest
+        kind: Project
+        apiVersion: project.openshift.io/v1
         name: "{{ project_name }}"
         state: present
         definition:
