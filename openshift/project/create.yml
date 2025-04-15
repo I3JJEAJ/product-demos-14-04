@@ -1,48 +1,52 @@
 ---
-- name: Create OpenShift project
-  kubernetes.core.k8s:
-    api_version: project.openshift.io/v1
-    kind: ProjectRequest
-    name: "{{ project_name }}"
-    state: present
-    definition:
-      metadata:
+- name: Deploy a project with parameters on OpenShift
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create OpenShift project
+      kubernetes.core.k8s:
+        api_version: project.openshift.io/v1
+        kind: ProjectRequest
         name: "{{ project_name }}"
-        annotations:
-          openshift.io/display-name: "{{ project_display_name }}"
-          openshift.io/description: "{{ project_description }}"
+        state: present
+        definition:
+          metadata:
+            name: "{{ project_name }}"
+            annotations:
+              openshift.io/display-name: "{{ project_display_name }}"
+              openshift.io/description: "{{ project_description }}"
 
-- name: Apply resource quotas to the project
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: v1
-      kind: ResourceQuota
-      metadata:
-        name: "{{ resource_quota.name }}"
-        namespace: "{{ project_name }}"
-      spec:
-        hard:
-          requests.cpu: "{{ resource_quota.requests_cpu }}"
-          requests.memory: "{{ resource_quota.requests_memory }}"
-          limits.cpu: "{{ resource_quota.limits_cpu }}"
-          limits.memory: "{{ resource_quota.limits_memory }}"
+    - name: Apply resource quotas to the project
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: ResourceQuota
+          metadata:
+            name: "{{ resource_quota.name }}"
+            namespace: "{{ project_name }}"
+          spec:
+            hard:
+              requests.cpu: "{{ resource_quota.requests_cpu }}"
+              requests.memory: "{{ resource_quota.requests_memory }}"
+              limits.cpu: "{{ resource_quota.limits_cpu }}"
+              limits.memory: "{{ resource_quota.limits_memory }}"
 
-- name: Apply default container limits
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: v1
-      kind: LimitRange
-      metadata:
-        name: "{{ container_limits.name }}"
-        namespace: "{{ project_name }}"
-      spec:
-        limits:
-          - type: Container
-            default:
-              cpu: "{{ container_limits.default_cpu }}"
-              memory: "{{ container_limits.default_memory }}"
-            defaultRequest:
-              cpu: "{{ container_limits.request_cpu }}"
-              memory: "{{ container_limits.request_memory }}"
+    - name: Apply default container limits
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: LimitRange
+          metadata:
+            name: "{{ container_limits.name }}"
+            namespace: "{{ project_name }}"
+          spec:
+            limits:
+              - type: Container
+                default:
+                  cpu: "{{ container_limits.default_cpu }}"
+                  memory: "{{ container_limits.default_memory }}"
+                defaultRequest:
+                  cpu: "{{ container_limits.request_cpu }}"
+                  memory: "{{ container_limits.request_memory }}"
