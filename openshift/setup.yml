@@ -246,6 +246,7 @@ controller_templates:
 
   - name: OpenShift / Create Project
     job_type: run
+    inventory: "Demo Inventory"
     ask_inventory_on_launch: true
     project: "Ansible Product Demos"
     playbook: "openshift/project/create.yml"
