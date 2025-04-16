@@ -23,14 +23,14 @@
           apiVersion: v1
           kind: ResourceQuota
           metadata:
-            name: "{{ resource_quota.name }}"
+            name: "{{ resource_quota_name }}"
             namespace: "{{ project_name }}"
           spec:
             hard:
-              requests.cpu: "{{ resource_quota.requests_cpu }}"
-              requests.memory: "{{ resource_quota.requests_memory }}"
-              limits.cpu: "{{ resource_quota.limits_cpu }}"
-              limits.memory: "{{ resource_quota.limits_memory }}"
+              requests.cpu: "{{ resource_quota_requests_cpu }}"
+              requests.memory: "{{ resource_quota_requests_memory }}"
+              limits.cpu: "{{ resource_quota_limits_cpu }}"
+              limits.memory: "{{ resource_quota_limits_memory }}"
 
     - name: Apply default container limits
       kubernetes.core.k8s:
@@ -39,14 +39,14 @@
           apiVersion: v1
           kind: LimitRange
           metadata:
-            name: "{{ container_limits.name }}"
+            name: "{{ container_limits_name }}"
             namespace: "{{ project_name }}"
           spec:
             limits:
               - type: Container
                 default:
-                  cpu: "{{ container_limits.default_cpu }}"
-                  memory: "{{ container_limits.default_memory }}"
+                  cpu: "{{ container_limits_default_cpu }}"
+                  memory: "{{ container_limits_default_memory }}"
                 defaultRequest:
-                  cpu: "{{ container_limits.request_cpu }}"
-                  memory: "{{ container_limits.request_memory }}"
+                  cpu: "{{ container_limits_request_cpu }}"
+                  memory: "{{ container_limits_request_memory }}"
